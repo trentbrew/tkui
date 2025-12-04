@@ -1,0 +1,143 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@id": "task:1",
+      "@type": "Task",
+      "title": "Design landing page mockups",
+      "description": "Create high-fidelity designs for the new landing page with responsive layouts",
+      "status": "in-progress",
+      "priority": "high",
+      "estimatedHours": 8,
+      "actualHours": 5,
+      "tags": [
+        "design",
+        "ui",
+        "frontend"
+      ],
+      "assignee": "person:trent-brew",
+      "createdAt": "2025-11-10T09:00:00.000Z",
+      "updatedAt": "2025-11-15T14:30:00.000Z"
+    },
+    {
+      "@id": "task:2",
+      "@type": "Task",
+      "title": "Implement authentication flow",
+      "description": "Set up OAuth2 authentication with Google and GitHub providers",
+      "status": "todo",
+      "priority": "high",
+      "estimatedHours": 12,
+      "tags": [
+        "backend",
+        "security",
+        "auth"
+      ],
+      "assignee": "person:tyler-church",
+      "createdAt": "2025-11-12T10:00:00.000Z",
+      "updatedAt": "2025-11-12T10:00:00.000Z"
+    },
+    {
+      "@id": "task:3",
+      "@type": "Task",
+      "title": "Write API documentation",
+      "description": "Document all REST API endpoints with examples and response schemas",
+      "status": "done",
+      "priority": "medium",
+      "estimatedHours": 6,
+      "actualHours": 7,
+      "tags": [
+        "documentation",
+        "api"
+      ],
+      "assignee": "person:brandon-curtis",
+      "createdAt": "2025-11-08T08:00:00.000Z",
+      "updatedAt": "2025-11-14T16:00:00.000Z"
+    },
+    {
+      "@id": "task:4",
+      "@type": "Task",
+      "title": "Fix database migration bug",
+      "description": "Resolve issue with foreign key constraints failing during migrations",
+      "status": "blocked",
+      "priority": "high",
+      "estimatedHours": 4,
+      "tags": [
+        "backend",
+        "database",
+        "bug"
+      ],
+      "assignee": "person:michael-jerrick",
+      "createdAt": "2025-11-13T11:00:00.000Z",
+      "updatedAt": "2025-11-15T09:00:00.000Z"
+    },
+    {
+      "@id": "task:5",
+      "@type": "Task",
+      "title": "Set up CI/CD pipeline",
+      "description": "Configure GitHub Actions for automated testing and deployment",
+      "status": "todo",
+      "priority": "medium",
+      "estimatedHours": 10,
+      "tags": [
+        "devops",
+        "ci-cd",
+        "automation"
+      ],
+      "assignee": "person:kim-vy-vo",
+      "createdAt": "2025-11-11T13:00:00.000Z",
+      "updatedAt": "2025-11-11T13:00:00.000Z"
+    },
+    {
+      "@id": "task:6",
+      "@type": "Task",
+      "title": "Optimize database queries",
+      "description": "Add indexes and optimize N+1 queries in user dashboard",
+      "status": "in-progress",
+      "priority": "medium",
+      "estimatedHours": 5,
+      "actualHours": 3,
+      "tags": [
+        "backend",
+        "performance",
+        "database"
+      ],
+      "assignee": "person:tyler-church",
+      "createdAt": "2025-11-14T10:00:00.000Z",
+      "updatedAt": "2025-11-16T08:00:00.000Z"
+    },
+    {
+      "@id": "task:7",
+      "@type": "Task",
+      "title": "Create component library",
+      "description": "Build reusable UI components with Storybook documentation",
+      "status": "done",
+      "priority": "low",
+      "estimatedHours": 20,
+      "actualHours": 22,
+      "tags": [
+        "frontend",
+        "ui",
+        "components"
+      ],
+      "assignee": "person:trent-brew",
+      "createdAt": "2025-10-28T09:00:00.000Z",
+      "updatedAt": "2025-11-09T17:00:00.000Z"
+    },
+    {
+      "@id": "task:8",
+      "@type": "Task",
+      "title": "Add dark mode support",
+      "description": "Implement dark mode theme with user preference persistence",
+      "status": "todo",
+      "priority": "low",
+      "estimatedHours": 8,
+      "tags": [
+        "frontend",
+        "ui",
+        "theme"
+      ],
+      "createdAt": "2025-11-15T14:00:00.000Z",
+      "updatedAt": "2025-11-15T14:00:00.000Z"
+    }
+  ]
+}
