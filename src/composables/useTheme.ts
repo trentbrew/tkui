@@ -1,6 +1,7 @@
-import { computed, watch, onMounted } from "vue";
+import { computed, onMounted, watch } from "vue";
+
 import { useThemeStore } from "../stores/theme";
-import { applyThemeToElement, saveThemeToStorage, loadThemeFromStorage } from "../utils/theme";
+import { applyThemeToElement, loadThemeFromStorage, saveThemeToStorage } from "../utils/theme";
 
 export function useTheme() {
   const themeStore = useThemeStore();
@@ -10,6 +11,9 @@ export function useTheme() {
     const stored = loadThemeFromStorage();
     if (stored) {
       themeStore.setThemeState(stored);
+    } else {
+      // Apply toolkit theme as default for light mode
+      themeStore.applyThemePreset("toolkit");
     }
     applyTheme();
   });

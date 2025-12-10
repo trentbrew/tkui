@@ -105,6 +105,18 @@ export const docsNavItems: NavItem[] = [
  * Static navigation items for the Examples section
  */
 export const examplesNavItems: NavItem[] = [
+  // Nucor Portals
+  { title: "Nucor Portals", isGroup: true, link: "" },
+  {
+    title: "Compliance Dashboard",
+    link: "/examples/compliance-dashboard",
+    icon: "lucide:shield-check",
+    isNew: true,
+  },
+  { title: "Data Table", link: "/examples/data-table", icon: "lucide:table-2", isNew: true },
+
+  // General
+  { title: "General", isGroup: true, link: "" },
   { title: "Task Manager", link: "/examples/task-manager", icon: "lucide:check-square" },
   { title: "Calendar", link: "/examples/calendar", icon: "lucide:calendar" },
   { title: "Messages", link: "/examples/messages", icon: "lucide:message-square" },

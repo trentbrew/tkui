@@ -1,8 +1,9 @@
 import { computed, watch } from "vue";
-import { useThemeManagerStore } from "../stores/themeManager";
-import { useThemeStore } from "../stores/theme";
-import { applyThemeToElement } from "../utils/theme";
 import type { Theme, ThemeStyles } from "../types/theme";
+
+import { useThemeStore } from "../stores/theme";
+import { useThemeManagerStore } from "../stores/themeManager";
+import { applyThemeToElement } from "../utils/theme";
 
 /**
  * Composable for managing standalone themes
@@ -55,7 +56,7 @@ export function useThemes() {
   function applyTheme(themeId: string | null) {
     if (!themeId) {
       // Reset to default
-      themeEditor.applyThemePreset("violet-bloom");
+      themeEditor.applyThemePreset("toolkit");
       themeManager.setActiveTheme(null);
       return;
     }
@@ -170,7 +171,7 @@ export function useThemes() {
    */
   function setMode(mode: "light" | "dark") {
     themeManager.setMode(mode);
-    
+
     // Reapply theme with new mode if there's an active theme
     if (themeManager.activeThemeId) {
       applyTheme(themeManager.activeThemeId);

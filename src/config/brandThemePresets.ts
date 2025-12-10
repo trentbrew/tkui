@@ -1,5 +1,7 @@
 import type { ThemePreset } from "../types/theme";
 
+import { toolkitTheme } from "./toolkitTheme";
+
 export const brandThemePresets: Record<string, ThemePreset> = {
   "modern-minimal": {
     label: "Modern Minimal",
@@ -3693,6 +3695,8 @@ export const brandThemePresets: Record<string, ThemePreset> = {
       },
     },
   },
+
+  toolkit: toolkitTheme,
 };
 
 export type BrandThemePresetKey = keyof typeof brandThemePresets;

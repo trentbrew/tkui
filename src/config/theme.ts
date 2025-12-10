@@ -1,6 +1,9 @@
-import type { ThemeEditorState, ThemePreset } from "../types/theme";
+import type { ThemeEditorState } from "../types/theme";
 
-// Common styles shared between light and dark modes
+// Re-export presets from canonical source
+export { brandThemePresets as themePresets } from "./brandThemePresets";
+
+// Common styles shared between light and dark modes (non-color properties)
 export const COMMON_STYLES = [
   "font-sans",
   "font-serif",
@@ -13,10 +16,10 @@ export const COMMON_STYLES = [
   "shadow-offset-y",
   "letter-spacing",
   "spacing",
-];
+] as const;
 
 export const DEFAULT_FONT_SANS =
-  "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'";
+  "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'";
 
 export const DEFAULT_FONT_SERIF = 'ui-serif, Georgia, Cambria, "Times New Roman", Times, serif';
 
@@ -118,126 +121,5 @@ export const defaultThemeState: ThemeEditorState = {
     hueShift: 0,
     saturationScale: 1,
     lightnessScale: 1,
-  },
-};
-
-// Built-in theme presets
-export const themePresets: Record<string, ThemePreset> = {
-  "violet-bloom": {
-    label: "Violet Bloom",
-    source: "BUILT_IN",
-    styles: {
-      light: {
-        background: "#fdfdfd",
-        foreground: "#000000",
-        primary: "#7033ff",
-        "primary-foreground": "#ffffff",
-        secondary: "#edf0f4",
-        "secondary-foreground": "#080808",
-        muted: "#f5f5f5",
-        "muted-foreground": "#525252",
-        accent: "#e2ebff",
-        "accent-foreground": "#1e69dc",
-        destructive: "#e54b4f",
-        "destructive-foreground": "#ffffff",
-        border: "#e7e7ee",
-        radius: "1.4rem",
-        "font-sans": "Plus Jakarta Sans, sans-serif",
-      },
-      dark: {
-        background: "#1a1b1e",
-        foreground: "#f0f0f0",
-        primary: "#8c5cff",
-        "primary-foreground": "#ffffff",
-        secondary: "#2a2c33",
-        "secondary-foreground": "#f0f0f0",
-        muted: "#2a2c33",
-        "muted-foreground": "#a0a0a0",
-        accent: "#1e293b",
-        "accent-foreground": "#79c0ff",
-        destructive: "#f87171",
-        "destructive-foreground": "#ffffff",
-        border: "#33353a",
-        radius: "1.4rem",
-      },
-    },
-  },
-  catppuccin: {
-    label: "Catppuccin",
-    source: "BUILT_IN",
-    styles: {
-      light: {
-        background: "#eff1f5",
-        foreground: "#4c4f69",
-        primary: "#8839ef",
-        "primary-foreground": "#ffffff",
-        secondary: "#ccd0da",
-        "secondary-foreground": "#4c4f69",
-        muted: "#dce0e8",
-        "muted-foreground": "#6c6f85",
-        accent: "#04a5e5",
-        "accent-foreground": "#ffffff",
-        destructive: "#d20f39",
-        "destructive-foreground": "#ffffff",
-        border: "#bcc0cc",
-        radius: "0.35rem",
-        "font-sans": "Montserrat, sans-serif",
-      },
-      dark: {
-        background: "#181825",
-        foreground: "#cdd6f4",
-        primary: "#cba6f7",
-        "primary-foreground": "#1e1e2e",
-        secondary: "#585b70",
-        "secondary-foreground": "#cdd6f4",
-        muted: "#292c3c",
-        "muted-foreground": "#a6adc8",
-        accent: "#89dceb",
-        "accent-foreground": "#1e1e2e",
-        destructive: "#f38ba8",
-        "destructive-foreground": "#1e1e2e",
-        border: "#313244",
-        radius: "0.35rem",
-      },
-    },
-  },
-  "mocha-mousse": {
-    label: "Mocha Mousse",
-    source: "BUILT_IN",
-    styles: {
-      light: {
-        background: "#F1F0E5",
-        foreground: "#56453F",
-        primary: "#A37764",
-        "primary-foreground": "#FFFFFF",
-        secondary: "#BAAB92",
-        "secondary-foreground": "#ffffff",
-        muted: "#E4C7B8",
-        "muted-foreground": "#8A655A",
-        accent: "#E4C7B8",
-        "accent-foreground": "#56453F",
-        destructive: "#1f1a17",
-        "destructive-foreground": "#FFFFFF",
-        border: "#BAAB92",
-        radius: "0.5rem",
-        "font-sans": "DM Sans, sans-serif",
-      },
-      dark: {
-        background: "#2d2521",
-        foreground: "#F1F0E5",
-        primary: "#C39E88",
-        "primary-foreground": "#2d2521",
-        secondary: "#8A655A",
-        "secondary-foreground": "#F1F0E5",
-        muted: "#56453F",
-        "muted-foreground": "#c5aa9b",
-        accent: "#BAAB92",
-        "accent-foreground": "#2d2521",
-        destructive: "#E57373",
-        "destructive-foreground": "#2d2521",
-        border: "#56453F",
-        radius: "0.5rem",
-      },
-    },
   },
 };

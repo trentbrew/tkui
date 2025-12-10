@@ -1,16 +1,20 @@
 import { type RouteRecordRaw } from "vue-router";
 
 import AppLayout from "./layouts/AppLayout.vue";
-
+import DocsComingSoon from "./pages/docs/coming-soon.vue";
+import DocsGettingStarted from "./pages/docs/getting-started.vue";
 // Docs pages
 import DocsIndex from "./pages/docs/index.vue";
-import DocsGettingStarted from "./pages/docs/getting-started.vue";
-import DocsComingSoon from "./pages/docs/coming-soon.vue";
-
+import ExamplesCalendar from "./pages/examples/calendar.vue";
+import ExamplesChatbot from "./pages/examples/chatbot.vue";
+import ExamplesComplianceDashboard from "./pages/examples/compliance-dashboard.vue";
+import ExamplesDataTable from "./pages/examples/data-table.vue";
+import ExamplesFeed from "./pages/examples/feed.vue";
 // Examples pages
 import ExamplesIndex from "./pages/examples/index.vue";
+import ExamplesMessages from "./pages/examples/messages.vue";
+import ExamplesSettings from "./pages/examples/settings.vue";
 import ExamplesTaskManager from "./pages/examples/task-manager.vue";
-
 // Themes
 import ThemesIndex from "./pages/themes.vue";
 
@@ -86,6 +90,16 @@ export const routes: RouteRecordRaw[] = [
         component: ExamplesIndex,
       },
       {
+        path: "examples/compliance-dashboard",
+        name: "examples-compliance-dashboard",
+        component: ExamplesComplianceDashboard,
+      },
+      {
+        path: "examples/data-table",
+        name: "examples-data-table",
+        component: ExamplesDataTable,
+      },
+      {
         path: "examples/task-manager",
         name: "examples-task-manager",
         component: ExamplesTaskManager,
@@ -93,27 +107,27 @@ export const routes: RouteRecordRaw[] = [
       {
         path: "examples/calendar",
         name: "examples-calendar",
-        component: () => import("./pages/examples/index.vue"), // Placeholder
+        component: ExamplesCalendar,
       },
       {
         path: "examples/messages",
         name: "examples-messages",
-        component: () => import("./pages/examples/index.vue"),
+        component: ExamplesMessages,
       },
       {
         path: "examples/chatbot",
         name: "examples-chatbot",
-        component: () => import("./pages/examples/index.vue"),
+        component: ExamplesChatbot,
       },
       {
         path: "examples/feed",
         name: "examples-feed",
-        component: () => import("./pages/examples/index.vue"),
+        component: ExamplesFeed,
       },
       {
         path: "examples/settings",
         name: "examples-settings",
-        component: () => import("./pages/examples/index.vue"),
+        component: ExamplesSettings,
       },
 
       // Themes section

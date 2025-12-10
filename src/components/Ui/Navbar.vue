@@ -1,9 +1,3 @@
-<template>
-  <Primitive :class="styles({ sticky, class: props.class })" v-bind="forwarded">
-    <slot />
-  </Primitive>
-</template>
-
 <script lang="ts" setup>
   import { reactiveOmit } from "@vueuse/core";
   import { Primitive, useForwardProps } from "reka-ui";
@@ -35,3 +29,9 @@
     },
   });
 </script>
+
+<template>
+  <Primitive :class="styles({ sticky, class: props.class })" v-bind="forwarded">
+    <slot />
+  </Primitive>
+</template>

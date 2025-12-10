@@ -1,44 +1,13 @@
 <script lang="ts" setup>
   import { computed, onMounted, ref, watch } from "vue";
   import { useRoute, useRouter } from "vue-router";
+  import type { NavSection, Organization } from "../components/Layout/types";
 
-  import { useBrandProfile } from "../composables/useBrandProfile";
-  import { useThemes } from "../composables/useThemes";
+  import { OrgSwitcher, SidebarNav, SidebarRail } from "../components/Layout";
   import { componentNavItems, docsNavItems, examplesNavItems } from "../utils/sidebar.nav";
-
-  // Types
-  export interface NavItem {
-    title: string;
-    link: string;
-    icon?: string;
-    count?: number;
-    isGroup?: boolean;
-    isNew?: boolean;
-  }
-
-  export interface NavSection {
-    id: string;
-    title: string;
-    icon: string;
-    description: string;
-    basePath: string;
-    items: NavItem[];
-    actionLabel?: string;
-    onAction?: () => void;
-  }
 
   const route = useRoute();
   const router = useRouter();
-  const { profiles, createProfile } = useBrandProfile();
-  const { presetThemes, customThemes, pinnedThemes } = useThemes();
-
-  // Organization type and data
-  interface Organization {
-    id: string;
-    name: string;
-    logo?: string;
-    plan: string;
-  }
 
   const organizations = ref<Organization[]>([
     { id: "1", name: "Nucor Corporation", logo: "", plan: "Enterprise" },
@@ -47,10 +16,30 @@
   ]);
 
   const selectedOrg = ref<Organization>(organizations.value[0]);
-
   const search = ref("");
   const activeSection = ref<NavSection | null>(null);
   const isDark = ref(document.documentElement.classList.contains("dark"));
+
+  // Generate breadcrumbs from route
+  const breadcrumbs = computed(() => {
+    const crumbs: Array<{ label: string; link: string; icon?: string }> = [
+      { label: "Home", link: "/", icon: "lucide:home" },
+    ];
+
+    const pathSegments = route.path.split("/").filter(Boolean);
+    let currentPath = "";
+
+    for (const segment of pathSegments) {
+      currentPath += `/${segment}`;
+      const label = segment
+        .split("-")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+      crumbs.push({ label, link: currentPath });
+    }
+
+    return crumbs;
+  });
 
   function toggleTheme() {
     isDark.value = !isDark.value;
@@ -91,40 +80,6 @@
       description: "Full-page templates",
       basePath: "/examples",
       items: examplesNavItems,
-    },
-    {
-      id: "themes",
-      title: "Themes",
-      icon: "lucide:sun-moon",
-      description: "Color schemes & styles",
-      basePath: "/themes",
-      actionLabel: "New Theme",
-      onAction: () => {
-        router.push("/themes?create=true");
-      },
-      items: [
-        { title: "Pinned", isGroup: true, link: "" },
-        ...pinnedThemes.value.slice(0, 5).map((t) => ({
-          title: t.name,
-          link: "/themes",
-          icon: "lucide:star",
-          isGroup: false,
-        })),
-        { title: "Custom", isGroup: true, link: "" },
-        ...customThemes.value.slice(0, 5).map((t) => ({
-          title: t.name,
-          link: "/themes",
-          icon: "lucide:paintbrush",
-          isGroup: false,
-        })),
-        { title: "Presets", isGroup: true, link: "" },
-        ...presetThemes.value.slice(0, 8).map((t) => ({
-          title: t.name,
-          link: "/themes",
-          icon: "lucide:palette",
-          isGroup: false,
-        })),
-      ].filter((item) => item.isGroup || item.title), // Filter empty groups
     },
   ]);
 
@@ -171,170 +126,45 @@
 </script>
 
 <template>
-  <aside class="flex h-screen">
-    <!-- Icon Rail -->
-    <div
-      class="bg-sidebar-primary text-sidebar-primary-foreground flex w-16 flex-col items-center py-4"
-    >
-      <!-- Logo -->
-      <!-- <div class="mb-4">
-        <RouterLink to="/">
-          <img src="/toolkit.png" alt="Toolkit UI" class="size-8 rounded object-contain" />
-        </RouterLink>
-      </div> -->
+  <aside class="bg-primary dark:bg-primary/50 flex h-screen">
+    <div class="p-0 flex h-screen w-full">
+      <!-- Icon Rail -->
+      <SidebarRail
+        :sections="navSections"
+        :active-section="activeSection"
+        :is-dark="isDark"
+        @select-section="setActiveSection"
+        @toggle-theme="toggleTheme"
+      />
 
-      <!-- Main Nav Icons -->
-      <nav class="flex flex-1 flex-col gap-2">
-        <div v-for="(section, i) in navSections" :key="i">
-          <ui-tooltip>
-            <ui-tooltip-trigger as-child>
-              <ui-button
-                :variant="activeSection?.id === section.id ? 'secondary' : 'ghost'"
-                size="icon"
-                @click="setActiveSection(section)"
-              >
-                <ui-icon :name="section.icon" class="size-[18px]" />
-              </ui-button>
-            </ui-tooltip-trigger>
-            <ui-tooltip-content side="right">{{ section.title }}</ui-tooltip-content>
-          </ui-tooltip>
-        </div>
-      </nav>
+      <!-- Section Sidebar -->
+      <div v-if="activeSection && route.path !== '/themes'" class="w-[320px] text-white">
+        <SidebarNav
+          :section="activeSection"
+          :items="filteredItems"
+          :search="search"
+          @update:search="search = $event"
+          @action="activeSection.onAction?.()"
+        >
+          <template #header>
+            <OrgSwitcher v-model="selectedOrg" :organizations="organizations" />
+          </template>
+        </SidebarNav>
+      </div>
 
-      <!-- Theme Toggle -->
-      <ui-tooltip>
-        <ui-tooltip-trigger as-child>
-          <ui-button variant="ghost" size="icon" @click="toggleTheme">
-            <ui-icon :name="isDark ? 'lucide:sun' : 'lucide:moon'" class="size-[18px]" />
-          </ui-button>
-        </ui-tooltip-trigger>
-        <ui-tooltip-content side="right">{{
-          isDark ? "Light mode" : "Dark mode"
-        }}</ui-tooltip-content>
-      </ui-tooltip>
-
-      <!-- Settings Button -->
-      <ui-tooltip>
-        <ui-tooltip-trigger as-child>
-          <ui-button variant="ghost" size="icon">
-            <ui-icon name="lucide:settings" class="size-[18px]" />
-          </ui-button>
-        </ui-tooltip-trigger>
-        <ui-tooltip-content side="right">Settings</ui-tooltip-content>
-      </ui-tooltip>
-    </div>
-
-    <!-- Section Sidebar -->
-    <div
-      v-if="activeSection && route.path !== '/themes'"
-      class="bg-sidebar-primary/80 text-sidebar-primary-foreground border-sidebar-primary/50 w-[260px] border-r"
-    >
-      <ui-scroll-area class="h-full">
-        <div class="flex h-screen flex-col p-4">
-          <!-- Org Switcher -->
-          <ui-dropdown-menu>
-            <ui-dropdown-menu-trigger as-child>
-              <button
-                class="mb-4 flex w-full items-center gap-3 rounded-md bg-white/10 px-3 py-2 text-left transition-colors hover:bg-white/20"
-              >
-                <ui-avatar
-                  :src="selectedOrg.logo"
-                  :fallback="selectedOrg.name.charAt(0)"
-                  class="size-8 rounded-md"
-                />
-                <div class="flex-1 truncate">
-                  <p class="text-sm font-medium">{{ selectedOrg.name }}</p>
-                  <p class="text-xs opacity-60">{{ selectedOrg.plan }}</p>
-                </div>
-                <ui-icon name="lucide:chevrons-up-down" class="size-4 opacity-60" />
-              </button>
-            </ui-dropdown-menu-trigger>
-            <ui-dropdown-menu-content class="w-[228px]" align="start">
-              <ui-dropdown-menu-label>Organizations</ui-dropdown-menu-label>
-              <ui-dropdown-menu-separator />
-              <ui-dropdown-menu-item
-                v-for="org in organizations"
-                :key="org.id"
-                @click="selectedOrg = org"
-                class="gap-3"
-              >
-                <ui-avatar
-                  :src="org.logo"
-                  :fallback="org.name.charAt(0)"
-                  class="size-6 rounded-md"
-                />
-                <span class="flex-1 truncate">{{ org.name }}</span>
-                <ui-icon
-                  v-if="selectedOrg.id === org.id"
-                  name="lucide:check"
-                  class="text-primary size-4"
-                />
-              </ui-dropdown-menu-item>
-              <ui-dropdown-menu-separator />
-              <ui-dropdown-menu-item>
-                <ui-icon name="lucide:plus" class="mr-2 size-4" />
-                Add organization
-              </ui-dropdown-menu-item>
-            </ui-dropdown-menu-content>
-          </ui-dropdown-menu>
-
-          <div class="mb-4">
-            <ui-input
-              v-model="search"
-              placeholder="Search..."
-              class="border-white/20 bg-white/10 pl-3 text-inherit placeholder:text-white/60 focus:border-white/40"
-            />
+      <!-- Main Content -->
+      <div class="flex-1 p-3 overflow-y-auto">
+        <div class="bg-background flex-1 overflow-y-auto rounded-lg h-full">
+          <ui-breadcrumbs
+            v-if="breadcrumbs.length > 1"
+            :items="breadcrumbs"
+            class="py-6 pb-7 mt-1 px-6 sticky top-0 bg-background backdrop-blur-2xl z-50"
+          />
+          <div class="px-6 pb-0 h-full">
+            <RouterView />
           </div>
-
-          <nav class="flex flex-1 flex-col gap-1 overflow-y-auto">
-            <template v-for="(item, i) in filteredItems" :key="`${item.title}-${i}`">
-              <!-- Group header -->
-              <div
-                v-if="item.isGroup"
-                class="mt-3 mb-1 px-2 text-xs font-medium tracking-wider uppercase opacity-60"
-              >
-                {{ item.title }}
-              </div>
-              <!-- Nav item -->
-              <RouterLink v-else :to="item.link" custom v-slot="{ isActive, navigate }">
-                <ui-button
-                  size="sm"
-                  :variant="isActive ? 'secondary' : 'ghost'"
-                  class="w-full justify-start gap-3 px-2"
-                  @click="navigate"
-                >
-                  <ui-icon v-if="item.icon" :name="item.icon" class="size-4 opacity-70" />
-                  <span>{{ item.title }}</span>
-                  <ui-badge
-                    v-if="item.isNew"
-                    class="ml-auto border-0 bg-white/20 !px-2 py-0 text-[10px] text-white"
-                    >New</ui-badge
-                  >
-                  <span v-else-if="item.count" class="ml-auto text-xs opacity-60">
-                    {{ item.count }}
-                  </span>
-                </ui-button>
-              </RouterLink>
-            </template>
-          </nav>
-
-          <!-- Section Action Button -->
-          <ui-button
-            v-if="activeSection.actionLabel"
-            class="mt-4 w-full"
-            size="sm"
-            @click="activeSection.onAction?.()"
-          >
-            <ui-icon name="lucide:plus" class="mr-2 size-4" />
-            {{ activeSection.actionLabel }}
-          </ui-button>
         </div>
-      </ui-scroll-area>
-    </div>
-
-    <!-- Main Content -->
-    <div class="bg-background flex-1 overflow-y-auto p-6">
-      <RouterView />
+      </div>
     </div>
   </aside>
 </template>

@@ -1,6 +1,7 @@
-import type { ThemeEditorState, ThemeStyleProps, ThemeStyles } from "../types/theme";
-import { COMMON_STYLES } from "../config/theme";
 import * as culori from "culori";
+import type { ThemeEditorState, ThemeStyleProps, ThemeStyles } from "../types/theme";
+
+import { COMMON_STYLES } from "../config/theme";
 
 type Theme = "dark" | "light";
 
@@ -58,9 +59,7 @@ export const convertToHSL = (colorValue: string): string => colorFormatter(color
 export function applyStyleToElement(element: HTMLElement, key: string, value: string) {
   const currentStyle = element.getAttribute("style") || "";
   // Remove the existing variable definitions with the same name
-  const cleanedStyle = currentStyle
-    .replace(new RegExp(`--${key}:\\s*[^;]+;?`, "g"), "")
-    .trim();
+  const cleanedStyle = currentStyle.replace(new RegExp(`--${key}:\\s*[^;]+;?`, "g"), "").trim();
 
   element.setAttribute("style", `${cleanedStyle}--${key}: ${value};`);
 }
@@ -77,7 +76,14 @@ export function setShadowVariables(themeState: ThemeEditorState) {
   const shadowOffsetX = themeState.styles[themeState.currentMode]["shadow-offset-x"];
   const shadowOffsetY = themeState.styles[themeState.currentMode]["shadow-offset-y"];
 
-  if (shadowColor && shadowOpacity && shadowBlur && shadowSpread && shadowOffsetX && shadowOffsetY) {
+  if (
+    shadowColor &&
+    shadowOpacity &&
+    shadowBlur &&
+    shadowSpread &&
+    shadowOffsetX &&
+    shadowOffsetY
+  ) {
     const shadow = `${shadowOffsetX} ${shadowOffsetY} ${shadowBlur} ${shadowSpread} ${shadowColor}`;
     applyStyleToElement(root, "shadow", shadow);
   }
@@ -95,7 +101,9 @@ function updateThemeClass(root: HTMLElement, mode: Theme) {
 // Apply common styles
 function applyCommonStyles(root: HTMLElement, themeStyles: ThemeStyleProps) {
   Object.entries(themeStyles)
-    .filter(([key]) => COMMON_NON_COLOR_KEYS.includes(key as (typeof COMMON_NON_COLOR_KEYS)[number]))
+    .filter(([key]) =>
+      COMMON_NON_COLOR_KEYS.includes(key as (typeof COMMON_NON_COLOR_KEYS)[number])
+    )
     .forEach(([key, value]) => {
       if (typeof value === "string") {
         applyStyleToElement(root, key, value);
@@ -110,7 +118,7 @@ function applyThemeColors(root: HTMLElement, themeStyles: ThemeStyles, mode: The
       typeof value === "string" &&
       !COMMON_NON_COLOR_KEYS.includes(key as (typeof COMMON_NON_COLOR_KEYS)[number])
     ) {
-      const hslValue = colorFormatter(value, "hsl", "4");
+      const hslValue = colorFormatter(value, "oklch", "4");
       applyStyleToElement(root, key, hslValue);
     }
   });
@@ -152,14 +160,14 @@ function injectThemeStylesheet(themeStyles: ThemeStyles) {
     .filter(
       ([key]) => !COMMON_NON_COLOR_KEYS.includes(key as (typeof COMMON_NON_COLOR_KEYS)[number])
     )
-    .map(([key, value]) => `  --${key}: ${colorFormatter(value as string, "hsl", "4")};`)
+    .map(([key, value]) => `  --${key}: ${colorFormatter(value as string, "oklch", "4")};`)
     .join("\n");
 
   const darkVars = Object.entries(themeStyles.dark)
     .filter(
       ([key]) => !COMMON_NON_COLOR_KEYS.includes(key as (typeof COMMON_NON_COLOR_KEYS)[number])
     )
-    .map(([key, value]) => `  --${key}: ${colorFormatter(value as string, "hsl", "4")};`)
+    .map(([key, value]) => `  --${key}: ${colorFormatter(value as string, "oklch", "4")};`)
     .join("\n");
 
   styleEl.textContent = `
