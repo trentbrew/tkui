@@ -61,7 +61,7 @@
     "eslint": "^9.33.0",
     "jszip": "^3.10.1",
     "lucide-vue-next": "^0.363.0",
-    "motion-v": "^1.7.0",
+    "motion-v": "^1.7.4",
     "pinia": "^3.0.3",
     "reka-ui": "^2.4.1",
     "tailwind-merge": "^3.3.1",
